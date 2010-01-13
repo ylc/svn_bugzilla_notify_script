@@ -1,0 +1,18 @@
+Script to update bugzilla based on svn commit log message. 
+This assumes that email_in.pl is set up to monitor the To: address. 
+
+To use, customize the variables to_addr, from_addr and view_svn_url.
+Call this script from your post_commit_hook by adding the following line:
+
+/path/to/svn/hooks/post_commit_bugzilla_notify.py "$REPOS" "$REV"
+
+It is  possible for the user  to specify a bug  id (or multiple  id's) and a
+"command" which is used to  share information with bugzilla. For example, if
+a user  writes in his commit  message "... ..  fixes bug 123 and  refers bug
+456... ..."  then a  summary of the  commit will  be posted to  the bugzilla
+pages of bug 123  and bug 456. Also, assuming that bug  123 is open, it will
+be marked  as RESOLVED/FIXED. It is  also possible to specify  in the commit
+log "reopens bug 123" and the  commit summary will be posted to bugzilla and
+the bug 123 will be reopened (assuming a closed state).
+
+This script is based on the trac-post-commit-hook by Stephen Hansen
