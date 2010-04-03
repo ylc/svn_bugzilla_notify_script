@@ -62,6 +62,14 @@ def add_status( ref ):
     else:
         return "\n"
 
+#function to differentiate between multiple bugzilla servers based on
+#bug id. I use this at my site. To enable, customize the logic, email addresses
+#and enable the call to this function from the commented call below.
+def resolve_server( bug_id ):
+    if int( bug_id ) > 50000:
+        return "BUGZILLA_INCOMING@server1.com"
+    else:
+        return "BUGZILLA_INCOMING@server2.com"
 
 def notify_bugzilla_from_svn( repo, rev ):
 
@@ -104,6 +112,8 @@ def notify_bugzilla_from_svn( repo, rev ):
     for command, bugs in cmd_groups:
         bug_id = bug_re.findall(bugs)[0]
         action = supported_cmds.get(command.lower(),'')
+        #enable the following for multiple bugzilla instances
+        #to_addr = resolve_server(bug_id) 
         if action:
             msg = "From: %s\nTo: %s\nSubject: [Bug %s]\n" % ( from_addr, to_addr, bug_id )
             msg += add_status( action )
